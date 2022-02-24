@@ -47,7 +47,26 @@ const modelGetById = async (id) => {
   return serializedSales;
 };
 
+const modelCreateSale = async (sale) => {
+  const [saleInsert] = await connection.execute('INSERT INTO sales (date) VALUES (now());');
+
+  const query = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?);';
+  
+  sale.forEach(async (product) => {
+    await connection.execute(query, [saleInsert.insertId, product.productId, product.quantity]);
+  });
+
+  const productArray = sale
+    .map((product) => ({ productId: product.productId, quantity: product.quantity }));
+
+  return {
+    id: saleInsert.insertId,
+    itemsSold: productArray,
+  };
+};
+
 module.exports = {
   modelGetAll,
   modelGetById,
+  modelCreateSale,
 };

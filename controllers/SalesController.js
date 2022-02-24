@@ -24,7 +24,19 @@ const controllerGetById = async (req, res, next) => {
   }
 };
 
+const controllerCreate = async (req, res, next) => {
+  try {
+    const sale = [...req.body];
+    const result = await salesModel.modelCreateSale(sale);
+
+    return res.status(201).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   controllerGetAll,
   controllerGetById,
+  controllerCreate,
 };
