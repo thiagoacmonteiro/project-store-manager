@@ -8,6 +8,20 @@ const serviceGetById = async (id) => {
   return sale;
 };
 
+const serviceDeleteSale = async (id) => {
+  const [result] = await salesModel.modelGetSalesIds();
+  const ids = result.map((data) => data.id);
+
+  if (!ids.includes(Number(id))) {
+    return { code: 404, message: 'Sale not found' };
+  }
+
+  await salesModel.modelDeleteSale(id);
+
+  return { code: 204 };
+};
+
 module.exports = {
   serviceGetById,
+  serviceDeleteSale,
 };

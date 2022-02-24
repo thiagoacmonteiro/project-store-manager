@@ -47,9 +47,24 @@ const controllerUpdate = async (req, res, next) => {
   }
 };
 
+const controllerDelete = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await salesService.serviceDeleteSale(id);
+
+    if (result.code === 404) return res.status(result.code).json({ message: result.message });
+
+    return res.status(result.code).end();
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   controllerGetAll,
   controllerGetById,
   controllerCreate,
   controllerUpdate,
+  controllerDelete,
 };

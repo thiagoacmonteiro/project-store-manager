@@ -1,9 +1,2 @@
-POST http://localhost:3000/sales
+DELETE http://localhost:3000/sales/2
 Content-Type: application/json
-
-[
-  {
-    "productId": 1,
-    "quantity": 6
-  }
-]

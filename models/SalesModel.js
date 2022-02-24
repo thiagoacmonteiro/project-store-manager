@@ -82,9 +82,27 @@ const modelUpdateSale = async (sale, id) => {
   };
 };
 
+const modelDeleteSale = async (id) => {
+  await connection.execute(
+    'DELETE FROM sales WHERE id = ?;', [id],
+  );
+
+  await connection.execute(
+    'DELETE FROM sales_products WHERE sale_id = ?;', [id],
+  );
+};
+
+const modelGetSalesIds = async () => {
+  const ids = await connection.execute('SELECT id FROM sales;');
+
+  return ids;
+};
+
 module.exports = {
   modelGetAll,
   modelGetById,
   modelCreateSale,
   modelUpdateSale,
+  modelDeleteSale,
+  modelGetSalesIds,
 };
