@@ -26,7 +26,7 @@ const modelCreate = async (name, quantity) => {
 };
 
 const modelUpdate = async (name, quantity, id) => {
-  const updatedProduct = await connection.execute(
+  await connection.execute(
     'UPDATE products SET name = ?, quantity= ? WHERE id = ?;', [name, quantity, id],
   );
 
