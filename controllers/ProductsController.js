@@ -24,7 +24,21 @@ const controllerGetById = async (req, res, next) => {
   }
 };
 
+const controllerCreate = async (req, res, next) => {
+  try {
+    const { name, quantity } = req.body;
+    const result = await productsService.serviceCreate(name, quantity);
+
+    if (result.code) return res.status(result.code).json({ message: result.message });
+
+    return res.status(201).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   controllerGetAll,
   controllerGetById,
+  controllerCreate,
 };
