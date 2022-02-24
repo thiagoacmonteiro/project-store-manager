@@ -65,8 +65,26 @@ const modelCreateSale = async (sale) => {
   };
 };
 
+const modelUpdateSale = async (sale, id) => {
+  await connection.execute(
+    'UPDATE sales_products SET product_id = ?, quantity = ? WHERE sale_id = ?;',
+    [sale[0].productId, sale[0].quantity, id],
+  );
+
+  return {
+    saleId: id,
+    itemUpdated: [
+      {
+        productId: sale[0].productId,
+        quantity: sale[0].quantity,
+      },
+    ],
+  };
+};
+
 module.exports = {
   modelGetAll,
   modelGetById,
   modelCreateSale,
+  modelUpdateSale,
 };
