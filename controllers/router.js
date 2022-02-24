@@ -9,6 +9,7 @@ const salesRouter = express.Router({ mergeParams: true });
 productsRouter.get('/', productsController.controllerGetAll);
 productsRouter.get('/:id', productsController.controllerGetById);
 productsRouter.post('/', ProductValidation, productsController.controllerCreate);
+productsRouter.put('/:id', ProductValidation, productsController.controllerUpdate);
 
 salesRouter.get('/', salesController.controllerGetAll);
 salesRouter.get('/:id', salesController.controllerGetById);

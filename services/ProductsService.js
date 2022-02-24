@@ -20,7 +20,22 @@ const serviceCreate = async (name, quantity) => {
   return product;
 };
 
+const serviceUpdate = async (name, quantity, id) => {
+  const allProducts = await productsModel.modelGetAll();
+  const ids = allProducts.map((product) => product.id);
+  const product = await productsModel.modelUpdate(name, quantity, id);
+
+  console.log(ids);
+  console.log(product.id);
+  if (!ids.includes(Number(product.id))) {
+    return { code: 404, message: 'Product not found' };
+  }
+
+  return product;
+};
+
 module.exports = {
   serviceGetById,
   serviceCreate,
+  serviceUpdate,
 };

@@ -1,7 +1,7 @@
-POST http://localhost:3000/products
+PUT http://localhost:3000/products/4
 Content-Type: application/json
 
 {
-  "name": "Máscara do Jon",
+  "name": "Máscara do filezin",
   "quantity": 10
 }

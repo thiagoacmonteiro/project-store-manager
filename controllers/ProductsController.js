@@ -37,8 +37,23 @@ const controllerCreate = async (req, res, next) => {
   }
 };
 
+const controllerUpdate = async (req, res, next) => {
+  try {
+    const { name, quantity } = req.body;
+    const { id } = req.params;
+    const result = await productsService.serviceUpdate(name, quantity, id);
+
+    if (result.code) return res.status(result.code).json({ message: result.message });
+
+    return res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   controllerGetAll,
   controllerGetById,
   controllerCreate,
+  controllerUpdate,
 };

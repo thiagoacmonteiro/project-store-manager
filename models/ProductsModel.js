@@ -17,9 +17,21 @@ const modelCreate = async (name, quantity) => {
   const [createdProduct] = await connection.execute(
     'INSERT INTO products (name, quantity) VALUES (?, ?);', [name, quantity],
   );
-  
+
   return {
     id: createdProduct.insertId,
+    name,
+    quantity,
+  };
+};
+
+const modelUpdate = async (name, quantity, id) => {
+  const updatedProduct = await connection.execute(
+    'UPDATE products SET name = ?, quantity= ? WHERE id = ?;', [name, quantity, id],
+  );
+
+  return {
+    id,
     name,
     quantity,
   };
@@ -29,4 +41,5 @@ module.exports = {
   modelGetAll,
   modelGetById,
   modelCreate,
+  modelUpdate,
 };
