@@ -13,10 +13,10 @@ module.exports = (req, res, next) => {
 
   const validationStatus = products.map((product) => salesSchema.validate(product));
 
-  const errorFound = validationStatus.find((data) => data.error).error;
+  const errorFound = validationStatus.find((data) => data.error);
 
   if (errorFound) {
-    const { message } = errorFound;
+    const { message } = errorFound.error;
 
     const status = message.includes('required') ? 400 : 422;
 
