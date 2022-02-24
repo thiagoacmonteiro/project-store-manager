@@ -1,4 +1,5 @@
 const connection = require('./connection');
+// const productsModel = require('./ProductsModel');
 
 const serializeGetAll = (salesData) => {
   const data = {
