@@ -37,9 +37,16 @@ const modelUpdate = async (name, quantity, id) => {
   };
 };
 
+const modelDelete = async (id) => {
+  await connection.execute(
+    'DELETE FROM products WHERE id = ?;', [id],
+  );
+};
+
 module.exports = {
   modelGetAll,
   modelGetById,
   modelCreate,
   modelUpdate,
+  modelDelete,
 };

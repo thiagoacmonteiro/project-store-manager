@@ -10,6 +10,7 @@ productsRouter.get('/', productsController.controllerGetAll);
 productsRouter.get('/:id', productsController.controllerGetById);
 productsRouter.post('/', ProductValidation, productsController.controllerCreate);
 productsRouter.put('/:id', ProductValidation, productsController.controllerUpdate);
+productsRouter.delete('/:id', productsController.controllerDelete);
 
 salesRouter.get('/', salesController.controllerGetAll);
 salesRouter.get('/:id', salesController.controllerGetById);

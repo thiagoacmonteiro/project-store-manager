@@ -1,7 +1,2 @@
-PUT http://localhost:3000/products/4
+DELETE http://localhost:3000/products/2
 Content-Type: application/json
-
-{
-  "name": "Máscara do filezin",
-  "quantity": 10
-}

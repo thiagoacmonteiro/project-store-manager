@@ -32,8 +32,22 @@ const serviceUpdate = async (name, quantity, id) => {
   return product;
 };
 
+const serviceDelete = async (id) => {
+  const allProducts = await productsModel.modelGetAll();
+  const ids = allProducts.map((product) => product.id);
+
+  if (!ids.includes(Number(id))) {
+    return { code: 404, message: 'Product not found' };
+  }
+
+  await productsModel.modelDelete(id);
+
+  return { code: 204 };
+};
+
 module.exports = {
   serviceGetById,
   serviceCreate,
   serviceUpdate,
+  serviceDelete,
 };
