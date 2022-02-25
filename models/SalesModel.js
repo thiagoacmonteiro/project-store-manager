@@ -1,5 +1,4 @@
 const connection = require('./connection');
-// const productsModel = require('./ProductsModel');
 
 const serializeGetAll = (salesData) => {
   const data = {
@@ -48,14 +47,26 @@ const modelGetById = async (id) => {
   return serializedSales;
 };
 
+const subtractProductQtyWhenCreateSale = (sale, saleQuery, saleInsert) => {
+  const updateProductQuery = 'UPDATE products SET quantity = ? WHERE id = ?;';
+  const productQuery = 'SELECT quantity FROM products WHERE id = ?;';
+
+  sale.forEach(async (product) => {
+    await connection.execute(saleQuery, [saleInsert.insertId, product.productId, product.quantity]);
+    const [productQuantity] = await connection.execute(productQuery, [product.productId]);
+    const { quantity } = productQuantity[0];
+    await connection
+      .execute(updateProductQuery, [(quantity - product.quantity), product.productId]);
+  });
+};
+
 const modelCreateSale = async (sale) => {
   const [saleInsert] = await connection.execute('INSERT INTO sales (date) VALUES (now());');
-
-  const query = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?);';
+  const saleQuery = (
+    'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?);'
+  );  
   
-  sale.forEach(async (product) => {
-    await connection.execute(query, [saleInsert.insertId, product.productId, product.quantity]);
-  });
+  subtractProductQtyWhenCreateSale(sale, saleQuery, saleInsert);
 
   const productArray = sale
     .map((product) => ({ productId: product.productId, quantity: product.quantity }));
@@ -64,6 +75,14 @@ const modelCreateSale = async (sale) => {
     id: saleInsert.insertId,
     itemsSold: productArray,
   };
+};
+
+const modelGetProductIdAndQty = async () => {
+  const qtyQuery = 'SELECT id, quantity FROM products;';
+ 
+  const [result] = await connection.execute(qtyQuery);
+
+  return result;
 };
 
 const modelUpdateSale = async (sale, id) => {
@@ -106,4 +125,5 @@ module.exports = {
   modelUpdateSale,
   modelDeleteSale,
   modelGetSalesIds,
+  modelGetProductIdAndQty,
 };

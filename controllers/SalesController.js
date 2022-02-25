@@ -27,7 +27,9 @@ const controllerGetById = async (req, res, next) => {
 const controllerCreate = async (req, res, next) => {
   try {
     const sale = [...req.body];
-    const result = await salesModel.modelCreateSale(sale);
+    const result = await salesService.serviceCreateSale(sale);
+
+    if (result.code) return res.status(result.code).json({ message: result.message });
 
     return res.status(201).json(result);
   } catch (e) {
