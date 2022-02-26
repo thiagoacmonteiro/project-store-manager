@@ -1,9 +1,2 @@
-POST http://localhost:3000/sales
+GET http://localhost:3000/products
 Content-Type: application/json
-
-[
-  {
-    "productId": 1,
-    "quantity": 6
-  }
-]

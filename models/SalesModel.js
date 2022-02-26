@@ -43,6 +43,7 @@ const modelGetById = async (id) => {
   const [sales] = await connection.execute(query, [id]);
 
   const serializedSales = sales.map((sale) => serializeGetById(sale));
+  console.log(serializedSales);
 
   return serializedSales;
 };
