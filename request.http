@@ -4,6 +4,6 @@ Content-Type: application/json
 [
   {
     "productId": 1,
-    "quantity": 500
+    "quantity": 6
   }
 ]

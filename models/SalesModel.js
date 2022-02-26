@@ -47,17 +47,19 @@ const modelGetById = async (id) => {
   return serializedSales;
 };
 
-const subtractProductQtyWhenCreateSale = (sale, saleQuery, saleInsert) => {
+const subtractProductQtyWhenCreateSale = async (sale, saleQuery, saleInsert) => {
   const updateProductQuery = 'UPDATE products SET quantity = ? WHERE id = ?;';
   const productQuery = 'SELECT quantity FROM products WHERE id = ?;';
 
-  sale.forEach(async (product) => {
+  const result = sale.map(async (product) => {
     await connection.execute(saleQuery, [saleInsert.insertId, product.productId, product.quantity]);
     const [productQuantity] = await connection.execute(productQuery, [product.productId]);
     const { quantity } = productQuantity[0];
     await connection
       .execute(updateProductQuery, [(quantity - product.quantity), product.productId]);
   });
+
+  await Promise.all(result);
 };
 
 const modelCreateSale = async (sale) => {
@@ -66,7 +68,7 @@ const modelCreateSale = async (sale) => {
     'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?);'
   );  
   
-  subtractProductQtyWhenCreateSale(sale, saleQuery, saleInsert);
+  await subtractProductQtyWhenCreateSale(sale, saleQuery, saleInsert);
 
   const productArray = sale
     .map((product) => ({ productId: product.productId, quantity: product.quantity }));
@@ -102,14 +104,35 @@ const modelUpdateSale = async (sale, id) => {
   };
 };
 
-const modelDeleteSale = async (id) => {
-  await connection.execute(
-    'DELETE FROM sales WHERE id = ?;', [id],
+const addProductQtyWhenDeleteSale = async (id) => {
+  const productQuery = 'SELECT quantity FROM products WHERE id = ?;';
+  const updateProductQuery = 'UPDATE products SET quantity = ? WHERE id = ?;';
+  const sumProductQtys = (
+    `SELECT product_id, SUM(quantity) AS quantity FROM sales_products WHERE sale_id = ?
+    GROUP BY product_id;`
   );
 
-  await connection.execute(
-    'DELETE FROM sales_products WHERE sale_id = ?;', [id],
-  );
+  const [quantitySold] = await connection.execute(sumProductQtys, [id]);
+  
+  const salesData = quantitySold.map(async (item) => {
+    const [quantity] = await connection.execute(productQuery, [item.product_id]);
+    await connection
+      .execute(
+        updateProductQuery, [(quantity[0].quantity + Number(item.quantity)), item.product_id],
+      );
+  });
+
+  await Promise.all(salesData);
+};
+
+const modelDeleteSale = async (id) => {
+  await addProductQtyWhenDeleteSale(id)
+    .then(() => connection.execute(
+      'DELETE FROM sales WHERE id = ?;', [id],
+    )
+    .then(() => connection.execute(
+      'DELETE FROM sales_products WHERE sale_id = ?;', [id],
+    )));
 };
 
 const modelGetSalesIds = async () => {
