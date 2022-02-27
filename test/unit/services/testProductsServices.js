@@ -46,7 +46,13 @@ describe('When call ProductsServices.ServiceGetAll', () => {
 
 describe('When call ProductsServices.ServiceGetById', () => {
 
-  const modelGetByIdReturn = [ { id: 1, name: 'Martelo de Thor', quantity: 10 } ];
+  const modelGetByIdReturn = [
+    {
+      id: 1,
+      name: 'Martelo de Thor',
+      quantity: 10
+    }
+  ];
 
   describe('if everything went well returns', async () => {
 
@@ -68,6 +74,38 @@ describe('When call ProductsServices.ServiceGetById', () => {
       await ProductsService.serviceGetById(1);
 
       expect(ProductsModel.modelGetById(1)).to.be.equal(modelGetByIdReturn);
+    })
+  })
+})
+
+describe('When call ProductsServices.serviceCreate', () => {
+
+  const modelCreateReturn = {
+    id: 1,
+    name: "produto",
+    quantity: 10
+  };
+
+  describe('if everything went well returns', async () => {
+
+    before(() => {
+      sinon.stub(ProductsModel, 'modelCreate').returns(modelCreateReturn);
+    })
+
+    after(() => {
+      ProductsModel.modelCreate.restore();
+    })
+
+    it('calling ServiceGetById will call modelCreate', async () => {
+      await ProductsService.serviceCreate();
+
+      expect(ProductsModel.modelCreate.calledWith()).to.be.equal(true);
+    })
+
+    it('calling serviceGetById, modelGetById will return an objects', async () => {
+      await ProductsService.serviceCreate();
+
+      expect(ProductsModel.modelCreate()).to.be.equal(modelCreateReturn);
     })
   })
 })

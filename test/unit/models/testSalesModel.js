@@ -71,6 +71,22 @@ describe('Test SalesModel layer', () => {
     });
   });
 
+  describe('When salesModels.modelCreateSale is called', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').returns([[affectedRows], []]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('check the return', async () => {
+      const result = await SalesModel.modelCreateSale(sale);
+      expect(result).to.be.an('object');
+    });
+  });
+
+
   describe('When salesModels.modelUpdateSale is called', () => {
     before(() => {
       sinon.stub(connection, 'execute').returns([[affectedRows], []]);

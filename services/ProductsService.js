@@ -2,7 +2,6 @@ const productsModel = require('../models/ProductsModel');
 
 const serviceGetAll = async () => {
   const products = await productsModel.modelGetAll();
-  console.log('service result', products);
 
   return products;
 };
