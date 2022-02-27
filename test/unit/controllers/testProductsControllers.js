@@ -27,11 +27,11 @@ describe('When call ProductsController.ControllerGetAll', () => {
     before(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
-      sinon.stub(ProductsModel, 'modelGetAll').returns(modelGetAllReturn);
+      sinon.stub(ProductsService, 'serviceGetAll').returns(modelGetAllReturn);
     })
 
     after(() => {
-      ProductsModel.modelGetAll.restore();
+      ProductsService.serviceGetAll.restore();
     })
 
     it('res.status is called with status 200', async () => {

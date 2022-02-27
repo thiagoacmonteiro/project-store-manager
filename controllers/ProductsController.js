@@ -1,9 +1,9 @@
-const productsModel = require('../models/ProductsModel');
 const productsService = require('../services/ProductsService');
 
 const controllerGetAll = async (_req, res, next) => {
   try {
-    const result = await productsModel.modelGetAll();
+    const result = await productsService.serviceGetAll();
+    console.log('controller result', result);
 
     return res.status(200).json(result);
   } catch (e) {

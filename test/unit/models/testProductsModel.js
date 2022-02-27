@@ -5,7 +5,28 @@ const connection = require('../../../models/connection');
 
 const ProductsModel = require('../../../models/ProductsModel');
 
+const products = [
+  {
+    id: 1,
+    name: "produto A",
+    quantity: 10
+  },
+  {
+    id: 2,
+    name: "produto B",
+    quantity: 20
+  }
+];
+
 describe('List all products', () => {
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([products]);
+  });
+
+  after(() => {
+    connection.execute.restore();
+  });
 
   it('returns an array', async () => {
     const products = await ProductsModel.modelGetAll();

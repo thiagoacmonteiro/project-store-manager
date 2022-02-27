@@ -4,6 +4,46 @@ const { expect } = require('chai');
 const ProductsModel = require('../../../models/ProductsModel');
 const ProductsService = require('../../../services/ProductsService');
 
+describe('When call ProductsServices.ServiceGetAll', () => {
+
+  const modelGetAllReturn = [
+    {
+      "id": 1,
+      "name": "produto A",
+      "quantity": 10
+    },
+    {
+      "id": 2,
+      "name": "produto B",
+      "quantity": 20
+    }
+  ];
+
+  describe('if everything went well returns', async () => {
+
+    before(() => {
+      sinon.stub(ProductsModel, 'modelGetAll').returns(modelGetAllReturn);
+    })
+
+    after(() => {
+      ProductsModel.modelGetAll.restore();
+    })
+
+    it('calling ServiceGetAll will call modelGetAll', async () => {
+      await ProductsService.serviceGetAll();
+
+      expect(ProductsModel.modelGetAll.calledWith()).to.be.equal(true);
+    })
+
+    it('calling serviceGetAll, modelGetAll will return an array of objects', async () => {
+      await ProductsService.serviceGetAll();
+
+      expect(ProductsModel.modelGetAll()).to.be.equal(modelGetAllReturn);
+    })
+  })
+})
+
+
 describe('When call ProductsServices.ServiceGetById', () => {
 
   const modelGetByIdReturn = [ { id: 1, name: 'Martelo de Thor', quantity: 10 } ];

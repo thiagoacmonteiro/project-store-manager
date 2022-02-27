@@ -1,5 +1,12 @@
 const productsModel = require('../models/ProductsModel');
 
+const serviceGetAll = async () => {
+  const products = await productsModel.modelGetAll();
+  console.log('service result', products);
+
+  return products;
+};
+
 const serviceGetById = async (id) => {
   const [product] = await productsModel.modelGetById(id);
 
@@ -50,4 +57,5 @@ module.exports = {
   serviceCreate,
   serviceUpdate,
   serviceDelete,
+  serviceGetAll,
 };

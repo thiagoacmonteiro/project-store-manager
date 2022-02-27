@@ -3,7 +3,7 @@ const salesService = require('../services/SalesService');
 
 const controllerGetAll = async (_req, res, next) => {
   try {
-    const result = await salesModel.modelGetAll();
+    const result = await salesService.serviceGetAll();
 
     return res.status(200).json(result);
   } catch (e) {

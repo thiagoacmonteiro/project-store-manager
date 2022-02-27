@@ -2,6 +2,7 @@ const connection = require('./connection');
 
 const modelGetAll = async () => {
   const [products] = await connection.execute('SELECT * FROM products ORDER BY id;');
+  console.log('model result', products);
 
   return products;
 };

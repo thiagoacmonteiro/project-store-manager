@@ -29,11 +29,11 @@ describe('When call SalesController.controllerGetAll', () => {
     before(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
-      sinon.stub(SalesModel, 'modelGetAll').returns(modelGetAllReturn);
+      sinon.stub(SalesService, 'serviceGetAll').returns(modelGetAllReturn);
     })
 
     after(() => {
-      SalesModel.modelGetAll.restore();
+      SalesService.serviceGetAll.restore();
     })
 
     it('res.status is called with status 200', async () => {
@@ -55,11 +55,11 @@ describe('When call SalesController.controllerGetAll', () => {
 
     before(() => {
       next = sinon.stub().returns();
-      sinon.stub(SalesModel, 'modelGetAll').throws(err);  
+      sinon.stub(SalesService, 'serviceGetAll').throws(err);  
     })
 
     after(() => {
-      SalesModel.modelGetAll.restore();
+      SalesService.serviceGetAll.restore();
     })
 
     it('SalesModel throws an error', async () => {
